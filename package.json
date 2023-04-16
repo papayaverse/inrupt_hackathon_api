@@ -1,0 +1,22 @@
+{
+  "name": "papayaverse_inrupt_hackathon_api",
+  "version": "0.0.1",
+  "description": "API to connect to app frontend using inrupt client libraries",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/papayaverse/inrupt_hackathon_api.git"
+  },
+  "author": "Ram Mukund Kripa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/papayaverse/inrupt_hackathon_api/issues"
+  },
+  "homepage": "https://github.com/papayaverse/inrupt_hackathon_api#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
