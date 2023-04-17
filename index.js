@@ -9,6 +9,7 @@ const {
 
 const app = express();
 const port = 3000;
+const deployUrl = `https://papaya-inrupt-hack-api.herokuapp.com`;
 
 // The following snippet ensures that the server identifies each user's session
 // with a cookie using an express-specific mechanism
@@ -42,7 +43,7 @@ app.get("/login", async (req, res, next) => {
     // After login, the Solid Identity Provider will send the user back to the following
     // URL, with the data necessary to complete the authentication process
     // appended as query parameters:
-    redirectUrl: `http://localhost:${port}/redirect-from-solid-idp`,
+    redirectUrl: `${deployUrl}/redirect-from-solid-idp`,
     // Set to the user's Solid Identity Provider; e.g., "https://login.inrupt.com" 
     oidcIssuer: "https://login.inrupt.com",
     // Pick an application name that will be shown when asked 
@@ -62,7 +63,7 @@ app.get("/redirect-from-solid-idp", async (req, res) => {
   // 4. With your session back from storage, you are now able to 
   //    complete the login process using the data appended to it as query
   //    parameters in req.url by the Solid Identity Provider:
-  await session.handleIncomingRedirect(`http://localhost:${port}${req.url}`);
+  await session.handleIncomingRedirect(`${deployUrl}${req.url}`);
 
   // 5. `session` now contains an authenticated Session instance.
   if (session.info.isLoggedIn) {
@@ -106,6 +107,6 @@ app.get("/", async (req, res, next) => {
 app.listen(port, () => {
   console.log(
     `Server running on port [${port}]. ` +
-    `Visit [http://localhost:${port}/login] to log in to [login.inrupt.com].`
+    `Visit [${deployUrl}/login] to log in to [login.inrupt.com].`
   );
 });
