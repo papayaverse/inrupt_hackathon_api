@@ -104,9 +104,9 @@ app.get("/", async (req, res, next) => {
   );
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(
-    `Server running on port [${port}]. ` +
+    `Server running on port. ` +
     `Visit [${deployUrl}/login] to log in to [login.inrupt.com].`
   );
 });
