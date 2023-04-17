@@ -8,3 +8,7 @@ Repo to create backend API for BravoVision Frontend using Inrupt JavaScript Clie
 [Link to Inrupt Login Express Web Server](https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/authenticate-nodejs-web-server/#example)
 
 [Link to Configure Oauth2 Login With Bravo](https://docs.bravostudio.app/integrations/user-authentication/oauth2)
+
+## Deployment
+
+Update: API succesfully deployed at https://papaya-inrupt-hack-api.herokuapp.com/
