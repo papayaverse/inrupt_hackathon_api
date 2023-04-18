@@ -14,7 +14,8 @@ const {
     getPodUrlAll,
     saveFileInContainer, 
     getSourceUrl,
-    overwriteFile
+    overwriteFile,
+    getFile
 } = require("@inrupt/solid-client");
 
 const app = express();
@@ -184,13 +185,8 @@ app.get("/wallet", async (req, res, next) => {
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
         // STEP1: Connect to Avalanche Network
-        try {
-            const web3 = new Web3(avalancheUrl);
-        }
-        catch (error) {
-            console.error(error);
-            return res.send(`<p>Failed to connect to avalanche network.</p>`)
-        }
+        const web3 = new Web3(avalancheUrl);
+        console.log("Connected to Avalanche Network")
         // STEP2: Get Wallet Address
         const walletFolderUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/";
         const walletAddressFileUrl = walletFolderUrl + "walletAddress.txt";
