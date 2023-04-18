@@ -195,7 +195,12 @@ app.get("/wallet", async (req, res, next) => {
             // Already have a wallet
             const walletAddressBlob = await getFile(walletAddressFileUrl, {fetch: session.fetch});
             const walletAddress = await walletAddressBlob.text();
-            return res.send(`<p>Wallet Address: ${walletAddress}.</p>`)
+            web3.eth.getBalance(walletAddress, (err, wei) => {
+                balance = web3.utils.fromWei(wei, 'ether')
+            })
+            console.log("Wallet Address: " + walletAddress);
+            console.log("Wallet Balance: " + balance);
+            return res.send(`<p>Wallet Address: ${walletAddress}.</p> <p> Balance : ${balance}</p>`)
         }
         catch (error) {
             console.error(error);
