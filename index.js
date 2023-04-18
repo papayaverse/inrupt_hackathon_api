@@ -7,6 +7,12 @@ const {
   Session
 } = require("@inrupt/solid-client-authn-node");
 
+const {
+    getSolidDataset,
+    getThing,
+    getPodUrlAll
+} = require("@inrupt/solid-client");
+
 const app = express();
 const port = 3000;
 const deployUrl = `https://papaya-inrupt-hack-api.herokuapp.com`;
@@ -67,7 +73,8 @@ app.get("/redirect-from-solid-idp", async (req, res) => {
 
   // 5. `session` now contains an authenticated Session instance.
   if (session.info.isLoggedIn) {
-    return res.send(`<p>Logged in with the WebID ${session.info.webId}.</p>`)
+    const podUrl = await getPodUrlAll(session.info.webId);
+    return res.send(`<p>Logged in with the WebID ${session.info.webId}. The podUrl(s) : ${podUrl}</p>`)
   }
 });
 
