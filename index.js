@@ -1,5 +1,6 @@
 const express = require("express");
 const cookieSession = require("cookie-session");
+const Web3 = require('web3');
 
 const { 
   getSessionFromStorage,
@@ -19,6 +20,7 @@ const {
 const app = express();
 const port = 3000;
 const deployUrl = `https://papaya-inrupt-hack-api.herokuapp.com`;
+const avalancheUrl = `https://avalanche-fuji.infura.io/v3/85e35e212e7c431a838571e469b3c64b`;
 
 // The following snippet ensures that the server identifies each user's session
 // with a cookie using an express-specific mechanism
@@ -150,16 +152,73 @@ app.get("/writeTestText2", async (req, res, next) => {
               { contentType: 'text/plain', fetch: session.fetch } // mimetype if known, fetch from the authenticated session
             );
             console.log(`File saved at ${getSourceUrl(savedFile)}`);
-          } catch (error) {
+        } catch (error) {
             console.error(error);
             return res.send(`<p>Failed to write to ${textUrl}.</p>`)
-          }
+        }
         return res.send(`<p>Performed authenticated write to ${textUrl}.</p>`)
     }
     else {
         return res.send("<p>Not logged in.</p>")
     }
 });
+
+// WALLET MODULE
+
+async function saveTextFile(fileUrl, text, session) {
+    filedata = Buffer.from(text, 'utf8');
+    try {
+        const savedFile = await overwriteFile(  
+          fileUrl,                   // URL for the file.
+          filedata,                        // Buffer containing file data
+          { contentType: 'text/plain', fetch: session.fetch } // mimetype if known, fetch from the authenticated session
+        );
+        console.log(`File saved at ${getSourceUrl(savedFile)}`);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+app.get("/wallet", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        // STEP1: Connect to Avalanche Network
+        const web3 = {};
+        try {
+            web3 = new Web3(avalancheUrl);
+        }
+        catch (error) {
+            console.error(error);
+            return res.send(`<p>Failed to connect to avalanche network.</p>`)
+        }
+        // STEP2: Get Wallet Address
+        const walletFolderUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/";
+        const walletAddressFileUrl = walletFolderUrl + "walletAddress.txt";
+        const walletPrivateKeyFileUrl = walletFolderUrl + "walletPrivateKey.txt";
+        try {
+            // Already have a wallet
+            const walletAddressBlob = await getFile(walletAddressFileUrl, {fetch: session.fetch});
+            const walletAddress = await walletAddressBlob.data;
+            return res.send(`<p>Wallet Address: ${walletAddress}.</p>`)
+        }
+        catch (error) {
+            console.error(error);
+            // Need to Create New Wallet
+            new_account = web3.eth.accounts.create();
+            console.log(new_account);
+            await saveTextFile(walletAddressFileUrl, new_account.address, session);
+            await saveTextFile(walletPrivateKeyFileUrl, new_account.privateKey, session);
+            return res.send(`<p> Created New Wallet at ${new_account.address}.</p>`)
+        }
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
+
+
 // 7. To log out a session, just retrieve the session from storage, and 
 //    call the .logout method.
 app.get("/logout", async (req, res, next) => {
