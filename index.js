@@ -104,6 +104,20 @@ app.get("/fetchTestImage", async (req, res, next) => {
     }
 });
 
+app.get("/fetchTestText", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const textUrl = podUrl[0] + "testFolder/testyText.txt";
+        const testText = await (await session.fetch(imgUrl)).text();
+        console.log(testText);
+        return res.send(`<p>Performed authenticated fetch.</p> <p> ${testText} </p>`)
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
 // 7. To log out a session, just retrieve the session from storage, and 
 //    call the .logout method.
 app.get("/logout", async (req, res, next) => {
