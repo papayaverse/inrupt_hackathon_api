@@ -27,7 +27,7 @@ app.use(
       "Required, but value not relevant for this demo - key1",
       "Required, but value not relevant for this demo - key2",
     ],
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    maxAge: 2 * 60 * 1000, // 2 minutes
   })
 );
 
