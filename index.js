@@ -10,7 +10,10 @@ const {
 const {
     getSolidDataset,
     getThing,
-    getPodUrlAll
+    getPodUrlAll,
+    saveFileInContainer, 
+    getSourceUrl,
+    overwriteFile
 } = require("@inrupt/solid-client");
 
 const app = express();
@@ -118,6 +121,45 @@ app.get("/fetchTestText", async (req, res, next) => {
     }
 });
 
+app.get("/fetchTestText2", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const textUrl = podUrl[0] + "testFolder/testyText2.txt";
+        const testText = await (await session.fetch(textUrl)).text();
+        console.log(testText);
+        return res.send(`<p>Performed authenticated fetch of ${textUrl}.</p> <p> ${testText} </p>`)
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
+app.get("/writeTestText2", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const textUrl = podUrl[0] + "testFolder/testyText2.txt";
+        const testText = "This is a test of writing to a file. Test text 2";
+        const filedata = Buffer.from(testText, 'utf8');
+        // Block to Write File
+        try {
+            const savedFile = await overwriteFile(  
+              textUrl,                   // URL for the file.
+              filedata,                        // Buffer containing file data
+              { contentType: 'text/plain', fetch: session.fetch } // mimetype if known, fetch from the authenticated session
+            );
+            console.log(`File saved at ${getSourceUrl(savedFile)}`);
+          } catch (error) {
+            console.error(error);
+            return res.send(`<p>Failed to write to ${textUrl}.</p>`)
+          }
+        return res.send(`<p>Performed authenticated write to ${textUrl}.</p>`)
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
 // 7. To log out a session, just retrieve the session from storage, and 
 //    call the .logout method.
 app.get("/logout", async (req, res, next) => {
