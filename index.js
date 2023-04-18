@@ -95,8 +95,9 @@ app.get("/fetchTestImage", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
-        console.log(await (await session.fetch(podUrl[0] + "testFolder/portal.png")).text());
-        return res.send("<p>Performed authenticated fetch.</p>")
+        const imgUrl = podUrl[0] + "testFolder/portal.png";
+        console.log(await (await session.fetch(imgUrl)).text());
+        return res.send(`<p>Performed authenticated fetch.</p> <p> <img src="${imgUrl}" width=500 height=600> </p>`)
     }
     else {
         return res.send("<p>Not logged in.</p>")
