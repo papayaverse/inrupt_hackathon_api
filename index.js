@@ -184,9 +184,8 @@ app.get("/wallet", async (req, res, next) => {
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
         // STEP1: Connect to Avalanche Network
-        const web3 = {};
         try {
-            web3 = new Web3(avalancheUrl);
+            const web3 = new Web3(avalancheUrl);
         }
         catch (error) {
             console.error(error);
