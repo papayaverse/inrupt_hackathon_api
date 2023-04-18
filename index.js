@@ -109,9 +109,9 @@ app.get("/fetchTestText", async (req, res, next) => {
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
         const textUrl = podUrl[0] + "testFolder/testyText.txt";
-        const testText = await (await session.fetch(imgUrl)).text();
+        const testText = await (await session.fetch(textUrl)).text();
         console.log(testText);
-        return res.send(`<p>Performed authenticated fetch.</p> <p> ${testText} </p>`)
+        return res.send(`<p>Performed authenticated fetch of ${textUrl}.</p> <p> ${testText} </p>`)
     }
     else {
         return res.send("<p>Not logged in.</p>")
