@@ -194,7 +194,7 @@ app.get("/wallet", async (req, res, next) => {
         try {
             // Already have a wallet
             const walletAddressBlob = await getFile(walletAddressFileUrl, {fetch: session.fetch});
-            const walletAddress = await walletAddressBlob.data;
+            const walletAddress = await walletAddressBlob.text();
             return res.send(`<p>Wallet Address: ${walletAddress}.</p>`)
         }
         catch (error) {
