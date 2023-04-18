@@ -198,7 +198,7 @@ app.get("/wallet", async (req, res, next) => {
             console.log("Wallet Address: " + walletAddress);
             console.log("Wallet Balance: ");
             web3.eth.getBalance(walletAddress).then(console.log);
-            balance = web3.fromWei(web3.eth.getBalance(walletAddress));
+            balance = web3.eth.getBalance(walletAddress);
             return res.send(`<p>Wallet Address: ${walletAddress}.</p> <p> Balance : ${balance} nAVAX</p>`)
         }
         catch (error) {
