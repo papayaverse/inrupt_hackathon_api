@@ -205,7 +205,7 @@ async function saveTextFile(fileUrl, text, session) {
 
 async function makeFilePublic(fileUrl, session) {
     // Fetch the SolidDataset and its associated ACLs, if available:
-    const myDatasetWithAcl = await getSolidDatasetWithAcl(fileUrl);
+    const myDatasetWithAcl = await getSolidDatasetWithAcl(fileUrl, {fetch: session.fetch});
 
     // Obtain the SolidDataset's own ACL, if available,
     // or initialise a new one, if possible:
@@ -227,14 +227,14 @@ async function makeFilePublic(fileUrl, session) {
     }
     resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
     } else {
-    resourceAcl = getResourceAcl(myDatasetWithAcl);
+    resourceAcl = getResourceAcl(myDatasetWithAcl, {fetch: session.fetch});
     }
     const updatedAcl = setPublicResourceAccess(
         resourceAcl,
         { read: true, append: true, write: false, control: false },
       );
     // Save the updated ACL back to the Pod:
-    await saveAclFor(myDatasetWithAcl, updatedAcl);
+    await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
 
 }
 
