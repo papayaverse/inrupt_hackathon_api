@@ -189,7 +189,7 @@ app.get("/makeWalletAddressPublic", async (req, res, next) => {
     }
 });
 
-// WALLET MODULE
+// UTILS TO HELP ME
 
 async function saveTextFile(fileUrl, text, session) {
     filedata = Buffer.from(text, 'utf8');
@@ -219,6 +219,8 @@ async function makePublicRead(resourceUrl, session) {
       });
 
 }
+
+// WALLET MODULE
 
 app.get("/wallet", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
@@ -258,7 +260,25 @@ app.get("/wallet", async (req, res, next) => {
     }
 });
 
+// DATA MODULE
 
+// Generate Some Fake Test Data
+
+app.get("/generateNetflixTestData", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/netflix/";
+        for (let i = 1; i < 10; i++) {
+            const dataFileUrl = dataFolderUrl + "movies_watched_2022_" + i + ".txt";
+            const data = "Set It Up; Friends With Benefits; How to Lose a Guy in 10 days; Fast and Furious " + i;
+            await saveTextFile(dataFileUrl, data, session);
+        }
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
 
 // 7. To log out a session, just retrieve the session from storage, and 
 //    call the .logout method.
