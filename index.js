@@ -175,11 +175,11 @@ app.get("/writeTestText2", async (req, res, next) => {
     }
 });
 
-app.get("/makeTestTextPublic", async (req, res, next) => {
+app.get("/makeWalletAddressPublic", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
-        const textUrl = podUrl[0] + "testFolder/testyText2.txt";
+        const textUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/walletAddress.txt";
         // Block to make file public
         makePublicRead(textUrl, session);
         res.send("<p>Check Logs to See if File is Public Readable</p>")
@@ -248,6 +248,7 @@ app.get("/wallet", async (req, res, next) => {
             console.log(new_account);
             await saveTextFile(walletAddressFileUrl, new_account.address, session);
             await saveTextFile(walletPrivateKeyFileUrl, new_account.privateKey, session);
+            makePublicRead(walletAddressFileUrl, session);
             return res.send(`<p> Created New Wallet at ${new_account.address}.</p>`)
         }
 
