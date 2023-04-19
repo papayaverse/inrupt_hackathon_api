@@ -9,6 +9,11 @@ Repo to create backend API for BravoVision Frontend using Inrupt JavaScript Clie
 
 [Link to Configure Oauth2 Login With Bravo](https://docs.bravostudio.app/integrations/user-authentication/oauth2)
 
+## DATA
+
+Created a fake netflix account :  https://id.inrupt.com/fakenetflix
+To show the data sharing capabilities with NFTs
+
 ## Deployment
 
 Update: API succesfully deployed at https://papaya-inrupt-hack-api.herokuapp.com/

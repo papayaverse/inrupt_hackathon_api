@@ -135,18 +135,13 @@ app.get("/fetchTestText", async (req, res, next) => {
     }
 });
 
-app.get("/fetchTestText2", async (req, res, next) => {
+app.get("/fetchFakeNetflixWalletAddress", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
-    if (session.info.isLoggedIn) {
-        const podUrl = await getPodUrlAll(session.info.webId);
-        const textUrl = podUrl[0] + "testFolder/testyText2.txt";
-        const testText = await (await session.fetch(textUrl)).text();
-        console.log(testText);
-        return res.send(`<p>Performed authenticated fetch of ${textUrl}.</p> <p> ${testText} </p>`)
-    }
-    else {
-        return res.send("<p>Not logged in.</p>")
-    }
+    const podUrl = await getPodUrlAll("https://id.inrupt.com/fakenetflix");
+    const textUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/walletAddress.txt";
+    const testText = await (await session.fetch(textUrl)).text();
+    console.log(testText);
+    return res.send(`<p>Performed unauthenticated fetch of Fake Netflix's Wallet Address ${textUrl}.</p> <p> ${testText} </p>`)
 });
 
 app.get("/writeTestText2", async (req, res, next) => {
