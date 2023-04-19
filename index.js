@@ -25,7 +25,8 @@ const {
     getResourceAcl,
     setAgentResourceAccess,
     setPublicResourceAccess,
-    saveAclFor
+    saveAclFor,
+    universalAccess
 } = require("@inrupt/solid-client");
 
 const app = express();
@@ -180,7 +181,8 @@ app.get("/makeTestTextPublic", async (req, res, next) => {
         const podUrl = await getPodUrlAll(session.info.webId);
         const textUrl = podUrl[0] + "testFolder/testyText2.txt";
         // Block to make file public
-        makeFilePublic(textUrl, session);
+        makePublicRead(textUrl, session);
+        res.send("<p>Check Logs to See if File is Public Readable</p>")
     }
     else {
         return res.send("<p>Not logged in.</p>")
@@ -203,38 +205,18 @@ async function saveTextFile(fileUrl, text, session) {
     }
 }
 
-async function makeFilePublic(fileUrl, session) {
-    // Fetch the SolidDataset and its associated ACLs, if available:
-    const myDatasetWithAcl = await getSolidDatasetWithAcl(fileUrl, {fetch: session.fetch});
-
-    // Obtain the SolidDataset's own ACL, if available,
-    // or initialise a new one, if possible:
-    let resourceAcl;
-    if (!hasResourceAcl(myDatasetWithAcl)) {
-    if (!hasAccessibleAcl(myDatasetWithAcl)) {
-        throw new Error(
-        "The current user does not have permission to change access rights to this Resource."
-        );
-    }
-    if (!hasFallbackAcl(myDatasetWithAcl)) {
-        throw new Error(
-        "The current user does not have permission to see who currently has access to this Resource."
-        );
-        // Alternatively, initialise a new empty ACL as follows,
-        // but be aware that if you do not give someone Control access,
-        // **nobody will ever be able to change Access permissions in the future**:
-        // resourceAcl = createAcl(myDatasetWithAcl);
-    }
-    resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
-    } else {
-    resourceAcl = getResourceAcl(myDatasetWithAcl, {fetch: session.fetch});
-    }
-    const updatedAcl = setPublicResourceAccess(
-        resourceAcl,
-        { read: true, append: true, write: false, control: false },
-      );
-    // Save the updated ACL back to the Pod:
-    await saveAclFor(myDatasetWithAcl, updatedAcl, {fetch: session.fetch});
+async function makePublicRead(resourceUrl, session) {
+    universalAccess.setPublicAccess(
+        resourceUrl,  // Resource
+        { read: true, write: false },    // Access object
+        { fetch: session.fetch }                 // fetch function from authenticated session
+      ).then((newAccess) => {
+        if (newAccess === null) {
+          console.log("Could not load access details for this Resource.");
+        } else {
+          console.log("Returned Public Access:: ", JSON.stringify(newAccess));
+        }
+      });
 
 }
 
