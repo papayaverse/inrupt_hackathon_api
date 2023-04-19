@@ -174,6 +174,19 @@ app.get("/writeTestText2", async (req, res, next) => {
     }
 });
 
+app.get("/makeTestTextPublic", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const textUrl = podUrl[0] + "testFolder/testyText2.txt";
+        // Block to make file public
+        makeFilePublic(textUrl, session);
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
 // WALLET MODULE
 
 async function saveTextFile(fileUrl, text, session) {
@@ -255,6 +268,7 @@ app.get("/wallet", async (req, res, next) => {
             await saveTextFile(walletPrivateKeyFileUrl, new_account.privateKey, session);
             return res.send(`<p> Created New Wallet at ${new_account.address}.</p>`)
         }
+
     }
     else {
         return res.send("<p>Not logged in.</p>")
