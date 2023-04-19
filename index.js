@@ -15,7 +15,17 @@ const {
     saveFileInContainer, 
     getSourceUrl,
     overwriteFile,
-    getFile
+    getFile,
+    getSolidDatasetWithAcl,
+    hasResourceAcl,
+    hasFallbackAcl,
+    hasAccessibleAcl,
+    createAcl,
+    createAclFromFallbackAcl,
+    getResourceAcl,
+    setAgentResourceAccess,
+    setPublicResourceAccess,
+    saveAclFor
 } = require("@inrupt/solid-client");
 
 const app = express();
@@ -178,6 +188,41 @@ async function saveTextFile(fileUrl, text, session) {
     } catch (error) {
         console.error(error);
     }
+}
+
+async function makeFilePublic(fileUrl, session) {
+    // Fetch the SolidDataset and its associated ACLs, if available:
+    const myDatasetWithAcl = await getSolidDatasetWithAcl(fileUrl);
+
+    // Obtain the SolidDataset's own ACL, if available,
+    // or initialise a new one, if possible:
+    let resourceAcl;
+    if (!hasResourceAcl(myDatasetWithAcl)) {
+    if (!hasAccessibleAcl(myDatasetWithAcl)) {
+        throw new Error(
+        "The current user does not have permission to change access rights to this Resource."
+        );
+    }
+    if (!hasFallbackAcl(myDatasetWithAcl)) {
+        throw new Error(
+        "The current user does not have permission to see who currently has access to this Resource."
+        );
+        // Alternatively, initialise a new empty ACL as follows,
+        // but be aware that if you do not give someone Control access,
+        // **nobody will ever be able to change Access permissions in the future**:
+        // resourceAcl = createAcl(myDatasetWithAcl);
+    }
+    resourceAcl = createAclFromFallbackAcl(myDatasetWithAcl);
+    } else {
+    resourceAcl = getResourceAcl(myDatasetWithAcl);
+    }
+    const updatedAcl = setPublicResourceAccess(
+        resourceAcl,
+        { read: true, append: true, write: false, control: false },
+      );
+    // Save the updated ACL back to the Pod:
+    await saveAclFor(myDatasetWithAcl, updatedAcl);
+
 }
 
 app.get("/wallet", async (req, res, next) => {
