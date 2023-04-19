@@ -241,7 +241,7 @@ app.get("/wallet", async (req, res, next) => {
             console.log("Wallet Balance: ");
             web3.eth.getBalance(walletAddress).then(console.log);
             balance = await web3.eth.getBalance(walletAddress);
-            return res.send(`<p>Wallet Address: ${walletAddress}.</p> <p> Balance : ${balance} nAVAX</p>`)
+            return res.send(`<p> ID: ${session.info.webId} </p> <p>Wallet Address: ${walletAddress}.</p> <p> Balance : ${balance} nAVAX</p>`)
         }
         catch (error) {
             console.error(error);
@@ -274,6 +274,7 @@ app.get("/generateNetflixTestData", async (req, res, next) => {
             const data = "Set It Up; Friends With Benefits; How to Lose a Guy in 10 days; Fast and Furious " + i;
             await saveTextFile(dataFileUrl, data, session);
         }
+        return res.send(`<p> Generated Fake Netflix Data.</p>`)
     }
     else {
         return res.send("<p>Not logged in.</p>")
