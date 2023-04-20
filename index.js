@@ -8,6 +8,8 @@ const {
   Session
 } = require("@inrupt/solid-client-authn-node");
 
+const { SDK, Auth, TEMPLATES, Metadata } = require('@infura/sdk') ;
+
 const {
     getSolidDataset,
     getThing,
@@ -217,8 +219,30 @@ async function makePublicRead(resourceUrl, session) {
           console.log("Returned Public Access:: ", JSON.stringify(newAccess));
         }
       });
-
 }
+
+async function sellNftAndChangeAccess(resourceUrl, tokenData, buyerWebId, session) {
+    // To be implemented : Sell NFT to buyer Wallet
+    // Change Access to buyer
+    universalAccess.setAgentAccess(
+        resourceUrl,  // Resource
+        buyerWebId,    // Agent
+        { read: true, write: false },    // Access object
+        { fetch: session.fetch }                 // fetch function from authenticated session
+        ).then((newAccess) => {
+        if (newAccess === null) {
+            console.log("Could not load access details for this Resource.");
+        } else {
+            console.log("Returned Agent Access:: ", JSON.stringify(newAccess));
+        }
+    });
+}
+
+async function mintNft(resourceUrl, tokenData, session) {
+    // To be implemented : Mint NFT
+}
+
+
 
 // WALLET MODULE
 
@@ -260,10 +284,62 @@ app.get("/wallet", async (req, res, next) => {
     }
 });
 
+// NFT display page
+
+app.get("/wallet/nfts", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        // STEP1: Connect to Avalanche Network
+        const web3 = new Web3(avalancheUrl);
+        console.log("Connected to Avalanche Network")
+        // STEP2: Get Wallet Address
+        const walletFolderUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/";
+        const walletAddressFileUrl = walletFolderUrl + "walletAddress.txt";
+        //const walletPrivateKeyFileUrl = walletFolderUrl + "walletPrivateKey.txt";
+        // Must Already have a wallet
+        const walletAddressBlob = await getFile(walletAddressFileUrl, {fetch: session.fetch});
+        const walletAddress = await walletAddressBlob.text();
+        console.log("Wallet Address: " + walletAddress);
+        const walletPrivateKeyFileUrl = walletFolderUrl + "walletPrivateKey.txt";
+        const walletPrivateKeyBlob = await getFile(walletPrivateKeyFileUrl, {fetch: session.fetch});
+        const walletPrivateKey = await walletPrivateKeyBlob.text();
+        const auth = new Auth({
+            projectId: "85e35e212e7c431a838571e469b3c64b",
+            secretId: "67760e3a23204a7e84a170d1364e33c0",
+            privateKey: walletPrivateKey,
+            chainId: 43113,
+        });
+        const sdk = new SDK(auth);
+        const result = await sdk.api.getCollectionsByWallet({
+            walletAddress: walletAddress,
+        });
+        console.log(result);
+        return res.send(`<p> ID: ${session.info.webId} </p> <p>Wallet Address: ${walletAddress}.</p> <p> NFTs : ${result} </p>`)
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+            
+
+
 // DATA MODULE
 
-// Generate Some Fake Test Data
+// Show Data
+app.get("/data", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/";
+        return res.send("<p> ID: " + session.info.webId + " </p> <p> Data Folder: " + dataFolderUrl + " </p>");
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
 
+// Generate Some Fake Test Data
 app.get("/generateNetflixTestData", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     if (session.info.isLoggedIn) {
