@@ -342,18 +342,33 @@ app.get("/data", async (req, res, next) => {
     }
 });
 
+app.get("/data/:company", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    const companyName = req.params.company;
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
+        const dataAsSolidDataset = await getSolidDataset(dataFolderUrl, { fetch: session.fetch });
+        const dataWithin = await getContainedResourceUrlAll(dataAsSolidDataset);
+        return res.send("<p> ID: " + session.info.webId + " </p> <p> Data of " + companyName + " : " + dataWithin + " </p>");
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
 // Generate Some Fake Test Data
-app.get("/generateNetflixTestData", async (req, res, next) => {
+app.get("/generateHuluTestData", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
-        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/netflix/";
-        for (let i = 1; i < 10; i++) {
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/hulu/";
+        for (let i = 1; i < 11; i++) {
             const dataFileUrl = dataFolderUrl + "movies_watched_2022_" + i + ".txt";
             const data = "Set It Up; Friends With Benefits; How to Lose a Guy in 10 days; Fast and Furious " + i;
             await saveTextFile(dataFileUrl, data, session);
         }
-        return res.send(`<p> Generated Fake Netflix Data.</p>`)
+        return res.send(`<p> Generated Fake Hulu Data.</p>`)
     }
     else {
         return res.send("<p>Not logged in.</p>")
