@@ -332,7 +332,9 @@ app.get("/data", async (req, res, next) => {
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
         const dataFolderUrl = podUrl[0] + "testFolder/papayaData/";
-        return res.send("<p> ID: " + session.info.webId + " </p> <p> Data Folder: " + dataFolderUrl + " </p>");
+        const dataAsSolidDataset = await getSolidDataset(dataFolderUrl, { fetch: session.fetch });
+        const dataWithin = await getContainedResourceUrlAll(dataAsSolidDataset);
+        return res.send("<p> ID: " + session.info.webId + " </p> <p> Data Folder: " + dataWithin + " </p>");
     }
     else {
         return res.send("<p>Not logged in.</p>")
