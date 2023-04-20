@@ -27,6 +27,7 @@ const {
     getResourceAcl,
     setAgentResourceAccess,
     setPublicResourceAccess,
+    getContainedResourceUrlAll,
     saveAclFor,
     universalAccess
 } = require("@inrupt/solid-client");
