@@ -30,5 +30,8 @@ Get /data to show what companies' data you have
 
 Get /data/companyName/sharingPreferences to show what your sharing Prefs are with that company
 
+Post /data/company/setSharingPreferences with a body like
+{someStuff, sharingPreferences: {basic: true, personalization: true, thirdParty: false}, someOtherStuff}
+
 
 
