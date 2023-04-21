@@ -384,15 +384,13 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
             let sharingBasic = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#basic");
             let sharingPersonalization = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#personalization");
             let sharingThirdParty = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#thirdParty");
-            console.log(sharingBasic);
-            console.log(sharingPersonalization);
-            console.log(sharingThirdParty);
-            const sharingPreferences = {
-                basic: getBoolean(sharingBasic, "http://schema.org/value"),
-                personalization: getBoolean(sharingPersonalization, "http://schema.org/value"),
-                thirdParty: getBoolean(sharingThirdParty, "http://schema.org/value")
-            };
-            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingPreferences)} </p> `)
+            let basic = getBoolean(sharingBasic, "http://schema.org/value");
+            let personalization = getBoolean(sharingPersonalization, "http://schema.org/value");
+            let thirdParty = getBoolean(sharingThirdParty, "http://schema.org/value");
+            console.log(basic);
+            console.log(personalization);
+            console.log(thirdParty);
+            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: Basic: ${basic}, Personalization: ${personalization}, Third Party: ${thirdParty}  </p> `)
         }
         catch(e) {
             return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${e.name} </p> `)
