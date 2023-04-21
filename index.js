@@ -391,7 +391,7 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
                 basic: getBoolean(sharingBasic, "http://schema.org/value"),
                 personalization: getBoolean(sharingPersonalization, "http://schema.org/value"),
                 thirdParty: getBoolean(sharingThirdParty, "http://schema.org/value")
-            }
+            };
             return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingPreferences)} </p> `)
         }
         catch(e) {
@@ -471,7 +471,7 @@ app.post("/data/:company/setSharingPreferences", async (req, res, next) => {
 });
 
 // Share Data with a Company according to preferences
-/*
+
 app.post("/data/:company1/share/:company2", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     const companyName = req.params.company1;
@@ -483,11 +483,12 @@ app.post("/data/:company1/share/:company2", async (req, res, next) => {
         const dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
         const sharingPreferencesUrl = dataFolderUrl + "/sharingPreferences/";
         const sharingPreferencesDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
-
-        if((companyName == buyerName) || (sharingPreferences == "thirdParty")){ 
-            tokenData = {};
-            mintNft(dataFolderUrl, tokenData, session);
-            sellNftAndChangeAccess(dataFolderUrl, tokenData, companyWebId, session);
+        let sharingThirdParty = getThing(sharingPreferencesDataset, sharingPreferencesUrl + "#thirdParty");
+        let thirdPartyPref = getBoolean(sharingThirdParty, "http://schema.org/value");
+        if((companyName == buyerName) || (thirdPartyPref)){ 
+            //tokenData = {};
+            //mintNft(dataFolderUrl, tokenData, session);
+            //sellNftAndChangeAccess(dataFolderUrl, tokenData, companyWebId, session);
             return res.send("<p> Data of " + companyName + " is now shared with " + companyName + ".</p>");
         }
     }
@@ -495,7 +496,6 @@ app.post("/data/:company1/share/:company2", async (req, res, next) => {
         return res.send("<p>Not logged in.</p>")
     }
 });
-*/
 
 
 // Generate Some Fake Test Data
