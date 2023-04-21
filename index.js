@@ -378,7 +378,7 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
                 return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: Not Set </p> `)
             }
             else {
-                throw e;
+                return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${e.name} </p> `)
             }
         }
     }
