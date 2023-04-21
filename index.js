@@ -47,7 +47,7 @@ app.use(
       "Required, but value not relevant for this demo - key1",
       "Required, but value not relevant for this demo - key2",
     ],
-    maxAge: 24 * 60 * 1000, // 24 minutes
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
   })
 );
 
@@ -74,7 +74,7 @@ app.get("/login", async (req, res, next) => {
     oidcIssuer: "https://login.inrupt.com",
     // Pick an application name that will be shown when asked 
     // to approve the application's access to the requested data.
-    clientName: "Demo app",
+    clientName: "Papaya Data Bank API",
     handleRedirect: redirectToSolidIdentityProvider,
   });
 });
@@ -240,7 +240,7 @@ async function sellNftAndChangeAccess(resourceUrl, tokenData, buyerWebId, sessio
 }
 
 async function mintNft(resourceUrl, tokenData, session) {
-    // To be implemented : Mint NFT
+    // To be implemented : Mint NFT of Data
 }
 
 
@@ -316,7 +316,7 @@ app.get("/wallet/nfts", async (req, res, next) => {
             walletAddress: walletAddress,
         });
         console.log(result);
-        return res.send(`<p> ID: ${session.info.webId} </p> <p>Wallet Address: ${walletAddress}.</p> <p> NFTs : ${result} </p>`)
+        return res.send(`<p> ID: ${session.info.webId} </p> <p>Wallet Address: ${walletAddress}.</p> <p> NFTs : ${JSON.stringify(result)} </p>`)
     }
     else {
         return res.send("<p>Not logged in.</p>")
@@ -342,6 +342,8 @@ app.get("/data", async (req, res, next) => {
     }
 });
 
+// Show Data of a Company
+
 app.get("/data/:company", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     const companyName = req.params.company;
@@ -356,6 +358,72 @@ app.get("/data/:company", async (req, res, next) => {
         return res.send("<p>Not logged in.</p>")
     }
 });
+
+// Get Data Sharing Preferences
+
+app.get("/data/:company/sharingPreferences", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    const companyName = req.params.company;
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
+        const sharingPreferencesUrl = dataFolderUrl + "sharingPreferences";
+        const sharingPreferences = req.body.sharingPreferences;
+        const sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
+        console.log(sharingAsSolidDataset);
+        return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingAsSolidDataset)} </p> `)
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
+// Set Data Sharing Preferences
+
+app.post("/data/:company/setSharingPreferences", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    const companyName = req.params.company;
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
+        const sharingPreferencesUrl = dataFolderUrl + "sharingPreferences";
+        const sharingPreferences = req.body.sharingPreferences;
+        // of the form: {basic: true, personalization: true, thirdParty: false}
+        const sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
+        console.log(sharingAsSolidDataset);
+        
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
+// Share Data with a Company according to preferences
+
+app.post("/data/:company1/share/:company2", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    const companyName = req.params.company1;
+    const buyerName = req.params.company2;
+    const companyWebId = "https://id.inrupt.com/fake" + companyName;
+    const buyerWebId = "https://id.inrupt.com/fake" + buyerName;
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
+        const sharingPreferencesUrl = dataFolderUrl + "/sharingPreferences/";
+        const sharingPreferencesDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
+
+        if((companyName == buyerName) || (sharingPreferences == "thirdParty")){ 
+            tokenData = {};
+            mintNft(dataFolderUrl, tokenData, session);
+            sellNftAndChangeAccess(dataFolderUrl, tokenData, companyWebId, session);
+            return res.send("<p> Data of " + companyName + " is now shared with " + companyName + ".</p>");
+        }
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
+
 
 // Generate Some Fake Test Data
 app.get("/generateHuluTestData", async (req, res, next) => {
