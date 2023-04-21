@@ -437,6 +437,7 @@ app.get("/data/:company/testSettingSharingPreferences", async (req, res, next) =
             const savedSharingDataset = await saveSolidDatasetAt(sharingPreferencesUrl, sharingAsSolidDataset, { fetch: session.fetch });
 
         }
+        makePublicRead(sharingPreferencesUrl, session.fetch);
         let sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
         return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingAsSolidDataset)} </p> `)
     }
@@ -464,7 +465,7 @@ app.post("/data/:company/setSharingPreferences", async (req, res, next) => {
 });
 
 // Share Data with a Company according to preferences
-
+/*
 app.post("/data/:company1/share/:company2", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     const companyName = req.params.company1;
@@ -488,9 +489,11 @@ app.post("/data/:company1/share/:company2", async (req, res, next) => {
         return res.send("<p>Not logged in.</p>")
     }
 });
+*/
 
 
 // Generate Some Fake Test Data
+/*
 app.get("/generateHuluTestData", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     if (session.info.isLoggedIn) {
@@ -506,7 +509,7 @@ app.get("/generateHuluTestData", async (req, res, next) => {
     else {
         return res.send("<p>Not logged in.</p>")
     }
-});
+});*/
 
 // 7. To log out a session, just retrieve the session from storage, and 
 //    call the .logout method.
