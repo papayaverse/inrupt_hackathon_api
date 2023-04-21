@@ -387,7 +387,7 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
             console.log(sharingBasic);
             console.log(sharingPersonalization);
             console.log(sharingThirdParty);
-            let sharingPreferences = {
+            const sharingPreferences = {
                 basic: getBoolean(sharingBasic, "http://schema.org/value"),
                 personalization: getBoolean(sharingPersonalization, "http://schema.org/value"),
                 thirdParty: getBoolean(sharingThirdParty, "http://schema.org/value")
