@@ -368,7 +368,6 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
         const podUrl = await getPodUrlAll(session.info.webId);
         const dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
         const sharingPreferencesUrl = dataFolderUrl + "sharingPreferences";
-        const sharingPreferences = req.body.sharingPreferences;
         const sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
         console.log(sharingAsSolidDataset);
         return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingAsSolidDataset)} </p> `)
@@ -391,7 +390,7 @@ app.post("/data/:company/setSharingPreferences", async (req, res, next) => {
         // of the form: {basic: true, personalization: true, thirdParty: false}
         const sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
         console.log(sharingAsSolidDataset);
-        
+
     }
     else {
         return res.send("<p>Not logged in.</p>")
