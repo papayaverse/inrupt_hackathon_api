@@ -381,15 +381,21 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
         try {
             const sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
             console.log(sharingAsSolidDataset);
-            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingAsSolidDataset)} </p> `)
+            let sharingBasic = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#basic");
+            let sharingPersonalization = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#personalization");
+            let sharingThirdParty = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#thirdParty");
+            console.log(sharingBasic);
+            console.log(sharingPersonalization);
+            console.log(sharingThirdParty);
+            let sharingPreferences = {
+                basic: getBoolean(sharingBasic, "http://schema.org/value"),
+                personalization: getBoolean(sharingPersonalization, "http://schema.org/value"),
+                thirdParty: getBoolean(sharingThirdParty, "http://schema.org/value")
+            }
+            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingPreferences)} </p> `)
         }
         catch(e) {
-            if (e.name == "FetchError") {
-                return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: Not Set </p> `)
-            }
-            else {
-                return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${e.name} </p> `)
-            }
+            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${e.name} </p> `)
         }
     }
     else {

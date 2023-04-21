@@ -17,3 +17,18 @@ To show the data sharing capabilities with NFTs
 ## Deployment
 
 Update: API succesfully deployed at https://papaya-inrupt-hack-api.herokuapp.com/
+
+## API ENDPOINTS THAT SHOULD ACTUALLY BE USED NOT JUST FOR TESTING
+
+Get /login for logging in and must change callback to bravo when integrated
+
+Get /wallet to show balance and address
+
+Get /wallet/nfts to show nfts owned
+
+Get /data to show what companies' data you have
+
+Get /data/companyName/sharingPreferences to show what your sharing Prefs are with that company
+
+
+
