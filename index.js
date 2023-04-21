@@ -29,8 +29,18 @@ const {
     setPublicResourceAccess,
     getContainedResourceUrlAll,
     saveAclFor,
-    universalAccess
+    universalAccess,
+    addUrl,
+    addBoolean,
+    addStringNoLocale,
+    createSolidDataset,
+    createThing,
+    setThing,
+    saveSolidDatasetAt,
+    buildThing
 } = require("@inrupt/solid-client");
+
+const { SCHEMA_INRUPT } = require("@inrupt/vocab-common-rdf");
 
 const app = express();
 const port = 3000;
@@ -388,6 +398,52 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
 });
 
 // Set Data Sharing Preferences
+
+app.get("/data/:company/testSettingSharingPreferences", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    const companyName = req.params.company;
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
+        const sharingPreferencesUrl = dataFolderUrl + "sharingPreferences";
+        const sharingPreferences = {basic: true, personalization: true, thirdParty: true};
+        try {
+            let sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
+            let sharingBasic = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#basic");
+            let sharingPersonalization = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#personalization");
+            let sharingThirdParty = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#thirdParty");
+            sharingBasic = setBoolean(sharingBasic, "http://schema.org/value", sharingPreferences.basic);
+            sharingAsSolidDataset = setThing(sharingAsSolidDataset, sharingBasic);
+            sharingPersonalization = setBoolean(sharingPersonalization, "http://schema.org/value", sharingPreferences.personalization);
+            sharingAsSolidDataset = setThing(sharingAsSolidDataset, sharingPersonalization);
+            sharingThirdParty = setBoolean(sharingThirdParty, "http://schema.org/value", sharingPreferences.thirdParty);
+            sharingAsSolidDataset = setThing(sharingAsSolidDataset, sharingThirdParty);
+            const savedSharingDataset = await saveSolidDatasetAt(sharingPreferencesUrl, sharingAsSolidDataset, { fetch: session.fetch });
+        }
+        catch(e) {
+            let sharingAsSolidDataset = createSolidDataset();
+            const sharingBasic = buildThing(createThing({ name: "basic" }))
+            .addBoolean("http://schema.org/value", sharingPreferences.basic)
+            .build();
+            const sharingPersonalization = buildThing(createThing({ name: "personalization" }))
+            .addBoolean("http://schema.org/value", sharingPreferences.personalization)
+            .build();
+            const sharingThirdParty = buildThing(createThing({ name: "thirdParty" }))
+            .addBoolean("http://schema.org/value", sharingPreferences.thirdParty)
+            .build();
+            sharingAsSolidDataset = setThing(sharingAsSolidDataset, sharingBasic);
+            sharingAsSolidDataset = setThing(sharingAsSolidDataset, sharingPersonalization);
+            sharingAsSolidDataset = setThing(sharingAsSolidDataset, sharingThirdParty);
+            const savedSharingDataset = await saveSolidDatasetAt(sharingPreferencesUrl, sharingAsSolidDataset, { fetch: session.fetch });
+
+        }
+        let sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
+        return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingAsSolidDataset)} </p> `)
+    }
+    else {
+        return res.send("<p>Not logged in.</p>")
+    }
+});
 
 app.post("/data/:company/setSharingPreferences", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
