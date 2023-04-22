@@ -441,7 +441,7 @@ app.get("/data/:company/testSettingSharingPreferences", async (req, res, next) =
             const savedSharingDataset = await saveSolidDatasetAt(sharingPreferencesUrl, sharingAsSolidDataset, { fetch: session.fetch });
 
         }
-        makePublicRead(sharingPreferencesUrl, session.fetch);
+        makePublicRead(sharingPreferencesUrl, session);
         let sharingAsSolidDataset = await getSolidDataset(sharingPreferencesUrl, { fetch: session.fetch });
         return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${JSON.stringify(sharingAsSolidDataset)} </p> `)
     }
