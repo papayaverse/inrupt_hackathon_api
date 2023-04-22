@@ -45,7 +45,7 @@ const { SCHEMA_INRUPT } = require("@inrupt/vocab-common-rdf");
 
 const app = express();
 const port = 3000;
-const deployUrl = `http://localhost:3000`;
+const deployUrl = `https://papaya-inrupt-hack-api.herokuapp.com`;
 const avalancheUrl = `https://avalanche-fuji.infura.io/v3/85e35e212e7c431a838571e469b3c64b`;
 
 // The following snippet ensures that the server identifies each user's session
