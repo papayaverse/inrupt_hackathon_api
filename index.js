@@ -91,29 +91,6 @@ app.get("/login", async (req, res, next) => {
   });
 });
 
-// app login
-
-app.get("/app/login", async (req, res, next) => {
-
-    await handleIncomingRedirect();
-
-    // 2. Start the Login Process if not already logged in.
-    if (!getDefaultSession().info.isLoggedIn) {
-        await login({
-        // Specify the URL of the user's Solid Identity Provider;
-        // e.g., "https://login.inrupt.com".
-        oidcIssuer: "https://login.inrupt.com",
-        // Specify the URL the Solid Identity Provider should redirect the user once logged in,
-        // e.g., the current page for a single-page app.
-        redirectUrl: window.location.href,
-        // Provide a name for the application when sending to the Solid Identity Provider
-        clientName: "papaya data bank api app"
-        });
-    }
-
-    
-  });
-
 app.get("/redirect-from-solid-idp", async (req, res) => {
   // 3. If the user is sent back to the `redirectUrl` provided in step 2,
   //    it means that the login has been initiated and can be completed. In
@@ -180,10 +157,10 @@ app.get("/fetchFakeNetflixWalletAddress", async (req, res, next) => {
         const textUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/walletAddress.txt";
         const testText = await (await session.fetch(textUrl)).text();
         console.log(testText);
-        return res.send(`<p>Performed unauthenticated fetch of Fake Netflix's Wallet Address ${textUrl}.</p> <p> ${testText} </p>`)
+        return res.json({fakeNetflixWalletAddress: testText});
     }
     else {
-        return res.send("<p>Not logged in.</p>")
+        return res.json({err: "Not logged in."});
     }
 });
 

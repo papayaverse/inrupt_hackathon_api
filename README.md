@@ -33,5 +33,9 @@ Get /data/companyName/sharingPreferences to show what your sharing Prefs are wit
 Post /data/company/setSharingPreferences with a body like
 {someStuff, sharingPreferences: {basic: true, personalization: true, thirdParty: false}, someOtherStuff}
 
+## Inrupt client reg
 
-
+client id: cc2c86f8-8771-4749-9d8a-e15682741176
+client secret: 8a95b5f1-86e7-45d2-9eb2-248d416fa73c
+client name: Papaya Hack API associated with id.inrupt.com/rammkripa
+token endpt: login.inrupt.com/token?
