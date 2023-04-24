@@ -613,17 +613,17 @@ app.get("/data/:company1/share/:company2", async (req, res, next) => {
                 template: TEMPLATES.ERC721Mintable,
                 contractAddress: greenPapayaAddress,
             });
-            const isMinter = await newContract.isMinter({
+            const isMinter = await greenPapayaContract.isMinter({
                 publicAddress: walletAddress
             });
             if (!isMinter) {
-                const minteradd = await existingContract.accessControl.addMinter({
+                const minteradd = await greenPapayaContract.accessControl.addMinter({
                     publicAddress: walletAddress,
                     gas: '5000'
                 });
             }
             //mintNft(dataFolderUrl, tokenData, session);
-            const mint = await existingContract.mint({
+            const mint = await greenPapayaContract.mint({
                 publicAddress: walletAddress,
                 tokenURI: metadataFileUrl,
             });
