@@ -1,6 +1,7 @@
 const express = require("express");
 const cookieSession = require("cookie-session");
 const Web3 = require('web3');
+const QS = require('qs');
 
 const { 
   getSessionFromStorage,
@@ -334,7 +335,66 @@ app.get("/wallet/nfts", async (req, res, next) => {
         return res.send("<p>Not logged in.</p>")
     }
 });
-            
+
+// Transaction module
+var transaction_counter = 0;
+app.get("/transaction/:toAccount/:Amount", async (req, res, next) => {
+  const session = await getSessionFromStorage(req.session.sessionId);
+  const podUrl = await getPodUrlAll(session.info.webId);
+  const web3 = new Web3(avalancheUrl);
+  const toAccount = req.params.toAccount;
+  const Amount = req.params.Amount;
+  console.log(`toAccount=${toAccount}`);
+  console.log(`Amount=${Amount}`);
+
+  const walletFolderUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/";
+  const walletAddressFileUrl = walletFolderUrl + "walletAddress.txt";
+  const walletPrivateKeyFileUrl = walletFolderUrl + "walletPrivateKey.txt";
+
+  try {
+    const walletAddressBlob = await getFile(walletAddressFileUrl, { fetch: session.fetch });
+    const walletAddress = await walletAddressBlob.text();
+    const walletPrivateKeyBlob = await getFile(walletPrivateKeyFileUrl, {fetch: session.fetch});
+    const walletPrivateKey = await walletPrivateKeyBlob.text();
+
+    const toWebId = `https://id.inrupt.com/${toAccount}`;
+    const toPodUrl = await getPodUrlAll(toWebId);
+    const toAccountWalletUrl = toPodUrl[0] + "testFolder/papayaWallet/wallet/avalanche/walletAddress.txt";
+    const toWalletAddress = await (await session.fetch(toAccountWalletUrl)).text();
+    
+    walletBalance = await web3.eth.getBalance(walletAddress);
+    console.log(`Wallet Balance: ${walletBalance}`);
+
+    transaction_counter += 1
+    const nonce = await web3.eth.getTransactionCount(walletAddress);
+    var transaction = await web3.eth.accounts.signTransaction({
+      from: walletAddress, //My hex
+      nonce: nonce,
+      gasPrice: '25000000000',
+      gas: '21000',
+      to: toWalletAddress, //Fake netflix
+      value: Amount,
+      data: "",
+    }, walletPrivateKey);
+    var tx_res = transaction.rawTransaction;
+    //console.log(`tx = ${tx_res}`);
+    var bdy = `<p>Thank you for contributing ${transaction_counter} transactions.</p>`;
+    web3.eth.sendSignedTransaction(tx_res)
+    .on('error', console.error)
+    .on('transactionHash', function(hash) {
+      console.log(`tx hash=${hash}`);
+      bdy = bdy + `<p> Hash = ${hash} </p>`;
+    })
+    .on('receipt', function(receipt) {
+      bdy = bdy + `<p> Receipt = ${receipt} </p>`;
+    });
+    return res.send(bdy)
+  }
+  catch (error) {
+    return res.send(`Woops - we had an error ${error}`)
+  }
+
+});  
 
 
 // DATA MODULE
