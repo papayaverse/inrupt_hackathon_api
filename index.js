@@ -614,6 +614,7 @@ app.get("/data/:company1/share/:company2", async (req, res, next) => {
                 template: TEMPLATES.ERC721Mintable,
                 contractAddress: greenPapayaAddress,
             });
+            /*
             const isMinter = await greenPapayaContract.isMinter({
                 publicAddress: walletAddress
             });
@@ -623,6 +624,7 @@ app.get("/data/:company1/share/:company2", async (req, res, next) => {
                     gas: '5000'
                 });
             }
+            */
             //mintNft(dataFolderUrl, tokenData, session);
             const mint = await greenPapayaContract.mint({
                 publicAddress: walletAddress,
