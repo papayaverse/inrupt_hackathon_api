@@ -600,7 +600,7 @@ app.get("/data/:company1/share/:company2", async (req, res, next) => {
             // Upload the metadata
             const metadataFileUrl = dataFolderUrl + "/tokens/" + buyerName + "/metadata.json";
             const metadataFile = new Blob([JSON.stringify(tokenData)], { type: "application/json" });
-            const metadataFileUploaded = await putFile(metadataFileUrl, metadataFile, { fetch: session.fetch });
+            const metadataFileUploaded = await overwriteFile(metadataFileUrl, metadataFile, { fetch: session.fetch });
             const auth = new Auth({
                 projectId: "85e35e212e7c431a838571e469b3c64b",
                 secretId: "67760e3a23204a7e84a170d1364e33c0",
