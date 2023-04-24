@@ -8,6 +8,8 @@ const {
   Session
 } = require("@inrupt/solid-client-authn-node");
 
+const { handleIncomingRedirect, login, fetch, getDefaultSession } = require('@inrupt/solid-client-authn-browser');
+
 const { SDK, Auth, TEMPLATES, Metadata } = require('@infura/sdk') ;
 
 const {
@@ -88,6 +90,29 @@ app.get("/login", async (req, res, next) => {
     handleRedirect: redirectToSolidIdentityProvider,
   });
 });
+
+// app login
+
+app.get("/app/login", async (req, res, next) => {
+
+    await handleIncomingRedirect();
+
+    // 2. Start the Login Process if not already logged in.
+    if (!getDefaultSession().info.isLoggedIn) {
+        await login({
+        // Specify the URL of the user's Solid Identity Provider;
+        // e.g., "https://login.inrupt.com".
+        oidcIssuer: "https://login.inrupt.com",
+        // Specify the URL the Solid Identity Provider should redirect the user once logged in,
+        // e.g., the current page for a single-page app.
+        redirectUrl: window.location.href,
+        // Provide a name for the application when sending to the Solid Identity Provider
+        clientName: "papaya data bank api app"
+        });
+    }
+
+    
+  });
 
 app.get("/redirect-from-solid-idp", async (req, res) => {
   // 3. If the user is sent back to the `redirectUrl` provided in step 2,
