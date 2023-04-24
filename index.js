@@ -384,13 +384,13 @@ app.get("/data/:company/sharingPreferences", async (req, res, next) => {
             let sharingBasic = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#basic");
             let sharingPersonalization = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#personalization");
             let sharingThirdParty = getThing(sharingAsSolidDataset, sharingPreferencesUrl + "#thirdParty");
-            //let basic = getBoolean(sharingBasic, "http://schema.org/value");
-            //let personalization = getBoolean(sharingPersonalization, "http://schema.org/value");
-            //let thirdParty = getBoolean(sharingThirdParty, "http://schema.org/value");
-            //console.log(basic);
-            //console.log(personalization);
-            //console.log(thirdParty);
-            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: Basic: ${JSON.stringify(sharingBasic)}, Personalization: ${JSON.stringify(sharingPersonalization)}, Third Party: ${JSON.stringify(sharingThirdParty)}  </p> `)
+            let basic = sharingBasic.predicates["http://schema.org/value"]["literals"]["http://www.w3.org/2001/XMLSchema#boolean"][0];
+            let personalization = sharingPersonalization.predicates["http://schema.org/value"]["literals"]["http://www.w3.org/2001/XMLSchema#boolean"][0];
+            let thirdParty = sharingThirdParty.predicates["http://schema.org/value"]["literals"]["http://www.w3.org/2001/XMLSchema#boolean"][0];
+            console.log(basic);
+            console.log(personalization);
+            console.log(thirdParty);
+            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: Basic: ${basic}, Personalization: ${personalization}, Third Party: ${thirdParty}  </p> `)
         }
         catch(e) {
             return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Sharing Preferences: ${e.name} </p> `)
