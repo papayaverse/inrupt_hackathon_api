@@ -618,13 +618,15 @@ app.get("/data/:company1/share/:company2", async (req, res, next) => {
             const isMinter = await greenPapayaContract.isMinter({
                 publicAddress: walletAddress
             });
+            */
+            let isMinter = false;
             if (!isMinter) {
                 const minteradd = await greenPapayaContract.accessControl.addMinter({
                     publicAddress: walletAddress,
                     gas: '5000'
                 });
             }
-            */
+            
             //mintNft(dataFolderUrl, tokenData, session);
             const mint = await greenPapayaContract.mint({
                 publicAddress: walletAddress,
