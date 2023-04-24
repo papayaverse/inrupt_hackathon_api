@@ -39,3 +39,9 @@ client id: cc2c86f8-8771-4749-9d8a-e15682741176
 client secret: 8a95b5f1-86e7-45d2-9eb2-248d416fa73c
 client name: Papaya Hack API associated with id.inrupt.com/rammkripa
 token endpt: login.inrupt.com/token?
+
+
+Bravo callback Uris
+https://a01GW2XN76ADARD08R9Q747S4Z0.callbacks.bravostudio.app for the app
+https://projects.bravostudio.app/callbacks/oauth-token foor oauth token
+https://vision.callbacks.bravostudio.app/ for idk what
