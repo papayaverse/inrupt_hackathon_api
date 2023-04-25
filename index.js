@@ -602,7 +602,7 @@ app.get("/data/:company1/shareNft", async (req, res, next) => {
                 privateKey: walletPrivateKey,
                 chainId: 43113,
                 ipfs:{
-                    projectID: "2Ln9KuRdOfa4hTWnUdf39vvM0mb",
+                    projectId: "2Ln9KuRdOfa4hTWnUdf39vvM0mb",
                     apiKeySecret: "4710efb8686ff12bba254795aff6bb97",
                 }
             });
