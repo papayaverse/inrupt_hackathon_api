@@ -617,7 +617,7 @@ app.get("/data/:company1/shareNft", async (req, res, next) => {
                     baseURI: linkMetadata,
                     contractURI: linkMetadata,
                     maxSupply: 10000,
-                    price: 0.002,
+                    price: "0.002",
                     maxTokenRequest: 1,
                 },
             });
@@ -668,7 +668,7 @@ app.get("/data/:username/accessNft/:company2", async (req, res, next) => {
         // Mint
         const mintTx = await GreenPapayaContract.mint({
             quantity: 1,
-            cost: 0.003,
+            cost: "0.003",
         });
         const minted = await mintTx.wait();
         console.log('Mint Tx: ', minted);
