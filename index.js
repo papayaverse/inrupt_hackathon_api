@@ -634,7 +634,7 @@ app.get("/data/:company1/shareNft", async (req, res, next) => {
 
 app.get("/data/:username/accessNft/:company2", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
-    const useryName = req.params.username;
+    const userName = req.params.username;
     const userWebId = "https://id.inrupt.com/" + userName;
     const company2Name = req.params.company2;
     const company2WebId = "https://id.inrupt.com/fake" + company2Name;
@@ -648,7 +648,7 @@ app.get("/data/:username/accessNft/:company2", async (req, res, next) => {
         const walletAddress = await walletAddressBlob.text();
         const walletPrivateKeyBlob = await getFile(walletPrivateKeyFileUrl, {fetch: session.fetch});
         const walletPrivateKey = await walletPrivateKeyBlob.text();
-        let userNftAddress = await getFile(userPod[0] + "testFolder/papayaData/" + company2 + "/tokens/contractAddress.txt", { fetch: session.fetch });
+        let userNftAddress = await getFile(userPod[0] + "testFolder/papayaData/" + company2Name + "/tokens/contractAddress.txt", { fetch: session.fetch });
         userNftAddress = await userNftAddress.text();
         const auth = new Auth({
             projectId: "85e35e212e7c431a838571e469b3c64b",
