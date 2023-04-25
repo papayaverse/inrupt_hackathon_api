@@ -615,8 +615,7 @@ app.get("/data/:company1/shareNft", async (req, res, next) => {
                   price: '0.0001',
                   maxTokenRequest: 1,
                 },
-              });
-              
+            });
             console.log('Contract: ', GreenPapayaContract.contractAddress);
             const contractAddressFileUrl = dataFolderUrl + "/tokens/contractAddress.txt";
             const contractAddressFile = new Blob(["" + GreenPapayaContract.contractAddress], { type: "text/plain" });
@@ -665,6 +664,7 @@ app.get("/data/:username/accessNft/:company2", async (req, res, next) => {
         const mintTx = await GreenPapayaContract.mint({
             quantity: 1,
             cost: '0.0001',
+            gasLimit: 1000000
         });
         const minted = await mintTx.wait();
         console.log('Mint Tx: ', minted);
