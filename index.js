@@ -630,6 +630,47 @@ app.get("/data/:company1/shareNft", async (req, res, next) => {
     }
 });
 
+// LET COMPANY2 ACCESS DATA OF PERSON SHARED BY COMPANY1
+
+app.get("/data/:username/accessNft/:company2", async (req, res, next) => {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    const useryName = req.params.username;
+    const userWebId = "https://id.inrupt.com/" + userName;
+    const company2Name = req.params.company2;
+    const company2WebId = "https://id.inrupt.com/fake" + company2Name;
+    if (session.info.isLoggedIn) {
+        const podUrl = await getPodUrlAll(session.info.webId);
+        const userPod = await getPodUrlAll(userWebId);
+        const walletFolderUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/";
+        const walletAddressFileUrl = walletFolderUrl + "walletAddress.txt";
+        const walletPrivateKeyFileUrl = walletFolderUrl + "walletPrivateKey.txt";
+        const walletAddressBlob = await getFile(walletAddressFileUrl, { fetch: session.fetch });
+        const walletAddress = await walletAddressBlob.text();
+        const walletPrivateKeyBlob = await getFile(walletPrivateKeyFileUrl, {fetch: session.fetch});
+        const walletPrivateKey = await walletPrivateKeyBlob.text();
+        let userNftAddress = await getFile(userPod[0] + "testFolder/papayaData/" + company2 + "/tokens/contractAddress.txt", { fetch: session.fetch });
+        userNftAddress = await userNftAddress.text();
+        const auth = new Auth({
+            projectId: "85e35e212e7c431a838571e469b3c64b",
+            secretId: "67760e3a23204a7e84a170d1364e33c0",
+            privateKey: walletPrivateKey,
+            chainId: 43113,
+        });
+        const sdk = new SDK(auth);
+        const GreenPapayaContract = await sdk.getContract(userNftAddress);
+        // Mint
+        const mintTx = await GreenPapayaContract.mint({
+            quantity: 1,
+            cost: '0.0001',
+        });
+        const minted = await mintTx.wait();
+        console.log('Mint Tx: ', minted);
+        return res.send(`<p> Minted at ${JSON.stringify(minted)}. </p>`);
+    }
+    else {
+        return res.send("<p>Not logged in.</p>");
+    }
+});
 
 // Generate Some Fake Test Data
 
