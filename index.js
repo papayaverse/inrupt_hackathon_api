@@ -657,7 +657,10 @@ app.get("/data/:username/accessNft/:company2", async (req, res, next) => {
             chainId: 43113,
         });
         const sdk = new SDK(auth);
-        const GreenPapayaContract = await sdk.getContract(userNftAddress);
+        const GreenPapayaContract = await sdk.loadContract({
+            template: TEMPLATES.ERC721UserMintable,
+            contractAddress: userNftAddress
+        });
         // Mint
         const mintTx = await GreenPapayaContract.mint({
             quantity: 1,
