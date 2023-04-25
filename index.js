@@ -610,11 +610,15 @@ app.get("/data/:company1/shareNft", async (req, res, next) => {
             const collectionMetadata = Metadata.openSeaCollectionLevelStandard(tokenData);
             const linkMetadata = await sdk.storeMetadata({ metadata: collectionMetadata });
             const GreenPapayaContract = await sdk.deploy({
-                template: TEMPLATES.ERC1155Mintable,
+                template: TEMPLATES.ERC721UserMintable,
                 params: {
+                    name: "GreenPapaya",
+                    symbol: "GP",
                     baseURI: linkMetadata,
                     contractURI: linkMetadata,
-                    ids: [1],
+                    maxSupply: 10000,
+                    price: 0.002,
+                    maxTokenRequest: 1,
                 },
             });
             console.log('Contract: ', GreenPapayaContract.contractAddress);
@@ -658,14 +662,13 @@ app.get("/data/:username/accessNft/:company2", async (req, res, next) => {
         });
         const sdk = new SDK(auth);
         const GreenPapayaContract = await sdk.loadContract({
-            template: TEMPLATES.ERC1155Mintable,
+            template: TEMPLATES.ERC721UserMintable,
             contractAddress: userNftAddress
         });
         // Mint
         const mintTx = await GreenPapayaContract.mint({
-            to: walletAddress,
-            id: 1,
-            quantity: '1',
+            quantity: 1,
+            cost: 0.003,
         });
         const minted = await mintTx.wait();
         console.log('Mint Tx: ', minted);
