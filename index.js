@@ -563,7 +563,6 @@ app.post("/data/:company/setSharingPreferences", async (req, res, next) => {
 app.get("/data/:company1/showOwners", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     const companyName = req.params.company1;
-    const companyWebId = "https://id.inrupt.com/fake" + companyName;
     if (session.info.isLoggedIn) {
         const podUrl = await getPodUrlAll(session.info.webId);
         const walletFolderUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/";
