@@ -569,6 +569,7 @@ app.get("/data/:company1/showOwners", async (req, res, next) => {
         const walletFolderUrl = podUrl[0] + "testFolder/papayaWallet/wallet/avalanche/";
         const walletAddressFileUrl = walletFolderUrl + "walletAddress.txt";
         const walletPrivateKeyFileUrl = walletFolderUrl + "walletPrivateKey.txt";
+        let dataFolderUrl = podUrl[0] + "testFolder/papayaData/" + companyName + "/";
         const contractAddressFileUrl = dataFolderUrl + "/tokens/contractAddress.txt";
         const contractAddressBlob = await getFile(contractAddressFileUrl, { fetch: session.fetch });
         const contractAddress = await contractAddressBlob.text();
