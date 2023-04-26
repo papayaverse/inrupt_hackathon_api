@@ -245,15 +245,6 @@ async function saveTextFile(fileUrl, text, session) {
     }
 }
 
-async function loggedIn(session) {
-    const session = await getSessionFromStorage(req.session.sessionId);
-    try {
-        return session.info.isLoggedIn;
-    } catch (error) {
-        console.error(error);
-        return false
-    }
-}
 
 async function makePublicRead(resourceUrl, session) {
     universalAccess.setPublicAccess(
