@@ -92,6 +92,28 @@ app.get("/login", async (req, res, next) => {
   });
 });
 
+app.get("/alt/login", async (req, res, next) => {
+    // 1. Create a new Session
+    const session = new Session();
+    session.login({
+  // 2. Use the authenticated credentials to log in the session.
+    clientId: "cc2c86f8-8771-4749-9d8a-e15682741176",
+    clientSecret: "8a95b5f1-86e7-45d2-9eb2-248d416fa73c",
+    oidcIssuer: "https://login.inrupt.com"
+    }).then(() => {
+  if (session.info.isLoggedIn) {
+    // 3. Your session should now be logged in, and able to make authenticated requests.
+    session
+      // You can change the fetched URL to a private resource, such as your Pod root.
+      .fetch(session.info.webId)
+      .then((response) => {
+        return response.text();
+      })
+      .then(console.log);
+  }
+});
+  });
+
 app.get("/redirect-from-solid-idp", async (req, res) => {
   // 3. If the user is sent back to the `redirectUrl` provided in step 2,
   //    it means that the login has been initiated and can be completed. In
