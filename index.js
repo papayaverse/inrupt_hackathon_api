@@ -275,10 +275,6 @@ async function makeAgentReadAndAppend(resourceUrl, agentUrl, session) {
     });
 }
 
-async function mintNft(resourceUrl, tokenData, session) {
-    // To be implemented : Mint NFT of Data
-}
-
 
 
 // WALLET MODULE
@@ -616,7 +612,8 @@ app.get("/data/:company1/showOwners", async (req, res, next) => {
         const owners = await sdk.api.getOwnersbyContractAddress({
             contractAddress: contractAddress
         });
-        res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Owners: ${JSON.stringify(owners2)} </p> `);
+        makeAgentReadAndAppend(dataFolderUrl, "https://id.inrupt.com/fakenetflix", session);
+        res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Owners: ${JSON.stringify(owners)} </p> `);
     }
     else {
         return res.send("<p>Not logged in.</p>")
