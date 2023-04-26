@@ -1,6 +1,6 @@
 {
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-    "client_id": "https://inrupt.github.io/solid-client-java/clients/android.jsonld",
+    "client_id": "https://raw.githubusercontent.com/papayaverse/inrupt_hackathon_api/main/bravoclientdoc.jsonld",
     "redirect_uris": [
       "https://vision.callbacks.bravostudio.app/",
       "https://projects.bravostudio.app/callbacks/oauth-token",
