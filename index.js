@@ -587,7 +587,9 @@ app.get("/data/:company1/showOwners", async (req, res, next) => {
             }
         });
         const sdk = new SDK(auth);
-        const owners = await sdk.api.getOwnersbyContractAddress(contractAddress);
+        const owners = await sdk.api.getOwnersbyContractAddress({
+            contractAddress: contractAddress
+        });
         console.log(owners);
         res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> Owners: ${JSON.stringify(owners)} </p> `);
     }
