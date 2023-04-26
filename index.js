@@ -599,7 +599,7 @@ app.get("/data/:company1/shareNft", async (req, res, next) => {
                 contractAddress: tokenAddress,
             });
             console.log('Owners:', owners);
-
+            return res.send(`<p> ID: ${session.info.webId}   </p> <p> Data of  ${companyName}  </p> <p> NFT owners: ${JSON.stringify(owners)} </p> `)
         }
         catch (e) {
             if((thirdPartyPref == "true")){ 
