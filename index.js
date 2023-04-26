@@ -92,6 +92,8 @@ app.get("/login", async (req, res, next) => {
   });
 });
 
+
+
 app.get("/alt/login", async (req, res, next) => {
     // 1. Create a new Session
     const session = new Session();
@@ -107,7 +109,7 @@ app.get("/alt/login", async (req, res, next) => {
       // You can change the fetched URL to a private resource, such as your Pod root.
       .fetch(session.info.webId)
       .then((response) => {
-        return response.text();
+        return res.json(response);
       })
       .then(console.log);
   }
@@ -240,6 +242,16 @@ async function saveTextFile(fileUrl, text, session) {
         console.log(`File saved at ${getSourceUrl(savedFile)}`);
     } catch (error) {
         console.error(error);
+    }
+}
+
+async function loggedIn(session) {
+    const session = await getSessionFromStorage(req.session.sessionId);
+    try {
+        return session.info.isLoggedIn;
+    } catch (error) {
+        console.error(error);
+        return false
     }
 }
 
