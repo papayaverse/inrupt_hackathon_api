@@ -1,0 +1,16 @@
+{
+    "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
+    "client_id": "https://inrupt.github.io/solid-client-java/clients/android.jsonld",
+    "redirect_uris": [
+      "https://vision.callbacks.bravostudio.app/",
+      "https://projects.bravostudio.app/callbacks/oauth-token",
+      "https://a01GW2XN76ADARD08R9Q747S4Z0.callbacks.bravostudio.app"
+    ],
+    "client_name": "Papaya Demo App Bravo",
+    "grant_types": [
+      "authorization_code", "refresh_token"
+    ],
+    "response_types": [
+      "code"
+    ]
+  }
