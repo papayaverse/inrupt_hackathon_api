@@ -7,8 +7,10 @@ Repo to create backend API for Papaya Data Bank Inrupt JavaScript Client Librari
 ## The Idea
 
 The way we handle consumer data is broken.
-So called "Consent and Preference Management" tools are nothing but legal CYA
+So called "Consent and Preference Management" tools are nothing but legal CYA.
+
 The reality is that we, as end users, have no idea what's happening to our data and it is subject to unethical third party sharing practices.
+
 Hence, we decided to form a new kind of institution known as a Data Bank.
 
 ## Architecture and Key Concepts
