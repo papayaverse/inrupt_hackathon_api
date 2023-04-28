@@ -36,8 +36,8 @@ Used Inrupt JS client libraries, as well as Web3.js and the Infura SDK to implem
 podUrl/testFolder/papayaData/hulu/:someFiles
 and podUrl/testFolder/papayaData/netflix/:someFiles
 using the /data/generateNetflixTestData and /data/generateHuluTestData endpoints.
-This is used to simulate actual companies sending data to pods
-We also set up a wallet using the /wallet endpoint
+This is used to simulate actual companies sending data to pods.
+We also set up a wallet using the /wallet endpoint.
 
 2) Then, we set user sharing preferences through the /data/companyName/testSettingSharingPreferences end point. This would simulate either setting preferences through the [demo app](https://bravostudioapp.page.link/?link=https%3A%2F%2Fapps-service.bravostudio.app%2Fdevices%2Fapps%2F01GW2XN76ADARD08R9Q747S4Z0&ofl=https%3A%2F%2Fbravostudio.app%2Fdownload-bravo-vision&apn=com.appfoundry.previewer&ibi=com.codelesslabs.app) (viewable on smartphones only) or through a Consent and Preference Management Pop Up on the site of choice.
 
