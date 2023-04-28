@@ -1,6 +1,5 @@
 {
     "@context": "https://www.w3.org/ns/solid/oidc-context.jsonld",
-    "client_id": "https://papaya-inrupt-hack-api.herokuapp.com",
     "redirect_uris": [
       "https://vision.callbacks.bravostudio.app/",
       "https://projects.bravostudio.app/callbacks/oauth-token",
