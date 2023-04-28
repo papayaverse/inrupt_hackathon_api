@@ -2,6 +2,8 @@
 
 Repo to create backend API for Papaya Data Bank using Inrupt JavaScript client libraries.
 
+[Link to Demo Video](https://youtu.be/ZygS-IFWmmc)
+
 # Papaya Data Bank
 
 ## The Idea
