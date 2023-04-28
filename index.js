@@ -175,6 +175,7 @@ app.get("/fetchTestText", async (req, res, next) => {
     }
 });
 
+// created FakeNetflix meant to represent a company wanting to access data of users using our API
 app.get("/fetchFakeNetflixWalletAddress", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     if (session.info.isLoggedIn) {
