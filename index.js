@@ -452,7 +452,6 @@ app.get("/data/:company", async (req, res, next) => {
 });
 
 // Get Data Sharing Preferences
-
 app.get("/data/:company/sharingPreferences", async (req, res, next) => {
     const session = await getSessionFromStorage(req.session.sessionId);
     const companyName = req.params.company;

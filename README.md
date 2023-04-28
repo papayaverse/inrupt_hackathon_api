@@ -9,6 +9,8 @@ Repo to create backend API for Papaya Data Bank using Inrupt JavaScript client l
 The way we, as a society, handle consumer data is broken.
 So called "Consent and Preference Management" tools are anti-consumer, designed to allow companies to continue to unethically harvest their users' data while complying with regulation.
 
+![image](https://raw.githubusercontent.com/papayaverse/inrupt_hackathon_api/main/jamieOliverconsentManagement.png)
+
 The reality is that we, as end users, have no idea what's happening to our data and it is subject to unethical third party sharing practices.
 
 Hence, we decided to form a new kind of institution known as a Data Bank.
@@ -38,6 +40,10 @@ We use this to simulate actual companies sending data to pods
 We also set up a wallet using the /wallet endpoint
 
 2) Then, we set user sharing preferences through the /data/companyName/testSettingSharingPreferences end point. This would simulate either setting preferences through the [demo app](https://bravostudioapp.page.link/?link=https%3A%2F%2Fapps-service.bravostudio.app%2Fdevices%2Fapps%2F01GW2XN76ADARD08R9Q747S4Z0&ofl=https%3A%2F%2Fbravostudio.app%2Fdownload-bravo-vision&apn=com.appfoundry.previewer&ibi=com.codelesslabs.app) or through a Consent and Preference Management Pop Up on the site of choice.
+
+![image](https://raw.githubusercontent.com/papayaverse/inrupt_hackathon_api/main/dataPreferences.png)
+
+![image](https://raw.githubusercontent.com/papayaverse/inrupt_hackathon_api/main/lorealdatap.png)
 
 3) We then use the /data/hulu/shareNft endpoint to deploy a contract based on sharing preferences of the user, since thirdParty was set to true.
 
