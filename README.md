@@ -6,22 +6,22 @@ Repo to create backend API for Papaya Data Bank using Inrupt JavaScript client l
 
 ## The Idea
 
-The way we, as a society, handle consumer data is broken.
+The way enterprises handle consumer data is broken.
 So called "Consent and Preference Management" tools are anti-consumer, designed to allow companies to continue to unethically harvest their users' data while complying with regulation.
 
 ![image](https://raw.githubusercontent.com/papayaverse/inrupt_hackathon_api/main/jamieOliverconsentManagement.png)
 
-The reality is that we, as end users, have no idea what's happening to our data and it is subject to unethical third party sharing practices.
+The reality is that end users have no idea what's happening to their data and it is subject to unethical third party sharing practices.
 
 Hence, we decided to form a new kind of institution known as a Data Bank.
 
 ## Architecture and Key Concepts
 
-We use Solid Pods to store data generated on various sites with the user and, if the user consents to third party data sharing, then companies have to pay the users via minting NFTs to access the data.
+Papaya use Solid Pods to store data generated on various sites with the user and, if the user consents to third party data sharing, then companies have to pay the users via minting NFTs to access the data.
 
 The end user is able to control who has access to their data via this NFT platform.
 
-This community has been quite outspoken against the world of "crypto" and "web3". However, we believe that the usage of NFTs here is far from a gimmick and serves two key purposes:
+The solid community has been quite outspoken against the world of "crypto" and "web3". However, we believe that the usage of NFTs here is far from a gimmick and serves two key purposes:
 
 1) Creating an indelible record on the blockchain of users sharing their data.
 2) Fairly compensating users for allowing companies to access to higher quality de-anonymized third party data if they choose to share it.
@@ -32,20 +32,20 @@ Used Inrupt JS client libraries, as well as Web3.js and the Infura SDK to implem
 
 ## Sample Flow
 
-1) We set up our pod (belonging to id.inrupt.com/ramtest) with some test data at 
+1) We set up a test pod (belonging to id.inrupt.com/ramtest) with some fake data at 
 podUrl/testFolder/papayaData/hulu/:someFiles
 and podUrl/testFolder/papayaData/netflix/:someFiles
 using the /data/generateNetflixTestData and /data/generateHuluTestData endpoints.
-We use this to simulate actual companies sending data to pods
+This is used to simulate actual companies sending data to pods
 We also set up a wallet using the /wallet endpoint
 
-2) Then, we set user sharing preferences through the /data/companyName/testSettingSharingPreferences end point. This would simulate either setting preferences through the [demo app](https://bravostudioapp.page.link/?link=https%3A%2F%2Fapps-service.bravostudio.app%2Fdevices%2Fapps%2F01GW2XN76ADARD08R9Q747S4Z0&ofl=https%3A%2F%2Fbravostudio.app%2Fdownload-bravo-vision&apn=com.appfoundry.previewer&ibi=com.codelesslabs.app) or through a Consent and Preference Management Pop Up on the site of choice.
+2) Then, we set user sharing preferences through the /data/companyName/testSettingSharingPreferences end point. This would simulate either setting preferences through the [demo app](https://bravostudioapp.page.link/?link=https%3A%2F%2Fapps-service.bravostudio.app%2Fdevices%2Fapps%2F01GW2XN76ADARD08R9Q747S4Z0&ofl=https%3A%2F%2Fbravostudio.app%2Fdownload-bravo-vision&apn=com.appfoundry.previewer&ibi=com.codelesslabs.app) (viewable on smartphones only) or through a Consent and Preference Management Pop Up on the site of choice.
 
 ![image](https://raw.githubusercontent.com/papayaverse/inrupt_hackathon_api/main/dataPreferences.png)
 
 ![image](https://raw.githubusercontent.com/papayaverse/inrupt_hackathon_api/main/lorealdatap.png)
 
-3) We then use the /data/hulu/shareNft endpoint to deploy a contract based on sharing preferences of the user, since thirdParty was set to true.
+3) Then, the /data/hulu/shareNft endpoint is used to deploy a contract based on sharing preferences of the user, since thirdParty sharing was set to true in the previous call.
 
 4) Then, FakeNetflix logs in and uses the /data/ramtest/accessNft/hulu endpoint to mint an NFT representing access to ramtest's hulu data. FakeNetflix pays the contract and this currency can be withdrawn by ramtest at any time.
 
@@ -103,7 +103,7 @@ I tried to generate an authorization code through login.inrupt.com/authorization
 
 Regardless, here is the
 [Link to BravoVision Frontend](https://bravostudioapp.page.link/?link=https%3A%2F%2Fapps-service.bravostudio.app%2Fdevices%2Fapps%2F01GW2XN76ADARD08R9Q747S4Z0&ofl=https%3A%2F%2Fbravostudio.app%2Fdownload-bravo-vision&apn=com.appfoundry.previewer&ibi=com.codelesslabs.app)
-which shows what the final experience would look like.
+which shows what the final experience would look like. It works only on mobile phones and requires a viewer to download the BravoVision app.
 
 ## Resources
 
