@@ -1,6 +1,6 @@
 # inrupt_hackathon_api
 
-Repo to create backend API for Papaya Data Bank using Inrupt JavaScript client libraries.
+ A Repo to create backend API for Papaya Data Bank using Inrupt JavaScript client libraries.
 
 [Link to Demo Video](https://youtu.be/ZygS-IFWmmc)
 
