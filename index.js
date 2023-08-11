@@ -127,6 +127,7 @@ app.get("/redirect-from-solid-idp", async (req, res) => {
   //    complete the login process using the data appended to it as query
   //    parameters in req.url by the Solid Identity Provider:
   await session.handleIncomingRedirect(`${deployUrl}${req.url}`);
+  // back at it
 
   // 5. `session` now contains an authenticated Session instance.
   if (session.info.isLoggedIn) {
